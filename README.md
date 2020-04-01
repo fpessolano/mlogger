@@ -2,9 +2,6 @@
 
 **About**  
 mlogger: module for multi file level logging  
-Date: 03-2020  
-Author: F. Pessolano  
-Licence: Proprietary  
 
 **Description**  
 Module for implementing a centralised level loggers with multiple files and supporting aggregation of log lines.  
