@@ -1,7 +1,8 @@
-# mlogger
-
-**About**  
-mlogger: module for multi file level logging  
+# MLOGGER  
+About:      module for multi file level logging  
+Version:    0.1.0  
+Author:     F.Pessolano  
+Licence:    MIT  
 
 **Description**  
 Module for implementing a centralised level loggers with multiple files and supporting aggregation of log lines.  
@@ -39,4 +40,6 @@ The _mlogger.Panic_ level method accept an additional parameter:
 
 _Quit_ is a bool then when set to true, will force the execution to brutally halt.
 
+**To be added**
+The current version opens and close all logfiles for each operation. Support for a mode keeping files always open will be added in the future.  
 
