@@ -40,6 +40,5 @@ The _mlogger.Panic_ level method accept an additional parameter:
 
 _Quit_ is a bool then when set to true, will force the execution to brutally halt.
 
-**To be added**
-The current version opens and close all logfiles for each operation. Support for a mode keeping files always open will be added in the future.  
+
 
