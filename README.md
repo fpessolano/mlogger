@@ -19,7 +19,7 @@ A logger is initialised with:
 
     logId, er := mlogger.DeclareLog(name, date) 
 
-Where _name_ is the logfile name. A log file is cerated everyday and th date appended to the name is _date_ is _true_.  
+Where _name_ is the logfile name. A log file is created everyday and thd date appended to the name is _date_ is _true_.  
 A id is given in _logId_ (int) and an _er_ error returned if any.  
 The logfile is formatted with the methos:  
 
@@ -36,7 +36,7 @@ _LoggerData_ is a struct containing the log line data.
 When _Aggregate_ is true, the data in _Data_ will be summed and the old first written log line will be updated with the new value and the latest modification date.  
 The _mlogger.Panic_ level method accept an additional parameter:
 
-    mlogger.Log(logId, LoggerData{Id: id, Message: message, Data: data, Agregate: aggregate}, quit)  
+    mlogger.Panic(logId, LoggerData{Id: id, Message: message, Data: data, Agregate: aggregate}, quit)  
 
 _Quit_ is a bool then when set to true, will force the execution to brutally halt.
 
