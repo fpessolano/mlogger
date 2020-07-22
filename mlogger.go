@@ -42,7 +42,7 @@ var BufDepth = 50 // buffer depth for the channel to the logger thread
 
 // Internal variables
 var declaredLogs map[int]logfile
-var lock *sync.RWMutex
+var lock sync.RWMutex
 var loggerChan chan logMessage
 var once sync.Once
 var consoleLog = false
