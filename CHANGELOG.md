@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.1]
+#### Changed
+ - SetError can also be aggregated  
+
 ## [0.2.0]
 #### Added
  - Lock for controlling access to definition map to avoid races with concurrent routines  

@@ -140,12 +140,12 @@ func Panic(lg int, dt LoggerData, quit bool) {
 }
 
 // SetError, depending if the error is not nil, sets the error or not
-func SetError(lg int, es string, id string, e error) bool {
+func SetError(lg int, es string, id string, e error, data []int, aggregate bool) bool {
 	if id == "" {
 		id = "n/a"
 	}
 	if e != nil {
-		Error(lg, LoggerData{id, es, []int{}, false})
+		Error(lg, LoggerData{id, es, data, aggregate})
 		return false
 	}
 	return true

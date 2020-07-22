@@ -1,6 +1,6 @@
 # MLOGGER  
 About:      module for multi file level logging  
-Version:    0.2.0  
+Version:    0.2.1  
 Author:     F.Pessolano  
 Licence:    MIT  
 
