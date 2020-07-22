@@ -42,6 +42,7 @@ var BufDepth = 50 // buffer depth for the channel to the logger thread
 
 // Internal variables
 var declaredLogs map[int]logfile
+var lock *sync.RWMutex
 var loggerChan chan logMessage
 var once sync.Once
 var consoleLog = false
@@ -60,6 +61,8 @@ func DeclareLog(fn string, dt bool) (int, error) {
 	if err != nil {
 		return -1, err
 	}
+	lock.Lock()
+	defer lock.Unlock()
 	if dt {
 		ct := time.Now().Local()
 		declaredLogs[index] = logfile{filename: filepath.Join(pwd, "log", fn+"_"+ct.Format("2006-01-02")+".logfile")}
@@ -84,6 +87,8 @@ func Close() (e error) {
 
 // SetTextLimit sets formatting limits for message (lm), id (li) and level (ll) in number of characters for logfile tag
 func SetTextLimit(tag, lm, li, ll int) error {
+	lock.Lock()
+	defer lock.Unlock()
 	if c, ok := declaredLogs[tag]; ok {
 		c.levelLength = ll
 		c.idLength = li
@@ -100,6 +105,8 @@ func SetTextLimit(tag, lm, li, ll int) error {
 func SetUpLogger(cf bool) {
 	consoleLog = cf
 	once.Do(func() {
+		lock.Lock()
+		defer lock.Unlock()
 		declaredLogs = make(map[int]logfile)
 		loggerChan = make(chan logMessage, BufDepth)
 		go logger(loggerChan)

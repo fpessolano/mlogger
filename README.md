@@ -1,6 +1,6 @@
 # MLOGGER  
 About:      module for multi file level logging  
-Version:    0.1.0  
+Version:    0.2.0  
 Author:     F.Pessolano  
 Licence:    MIT  
 
@@ -39,6 +39,8 @@ The _mlogger.Panic_ level method accept an additional parameter:
     mlogger.Panic(logId, LoggerData{Id: id, Message: message, Data: data, Agregate: aggregate}, quit)  
 
 _Quit_ is a bool then when set to true, will force the execution to brutally halt.
+
+
 
 
 
