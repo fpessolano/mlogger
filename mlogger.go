@@ -52,6 +52,8 @@ var index = 0
 // Furthermore, a new logfile will be created everyday. Otherwise it will be fn.logfile and will not be created everyday.
 // It returns the log identifier (int) and the eventual error
 func DeclareLog(fn string, dt bool) (int, error) {
+	lock.Lock()
+	defer lock.Unlock()
 	SetUpLogger(consoleLog)
 	pwd, err := os.Getwd()
 	if err != nil {
@@ -61,8 +63,6 @@ func DeclareLog(fn string, dt bool) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	lock.Lock()
-	defer lock.Unlock()
 	if dt {
 		ct := time.Now().Local()
 		declaredLogs[index] = logfile{filename: filepath.Join(pwd, "log", fn+"_"+ct.Format("2006-01-02")+".logfile")}
@@ -104,8 +104,8 @@ func SetTextLimit(tag, lm, li, ll int) error {
 // cf controls the console flag that determines if the application writes logging errors to the consoles or ignores them
 func SetUpLogger(cf bool) {
 	once.Do(func() {
-		lock.Lock()
-		defer lock.Unlock()
+		//lock.Lock()
+		//defer lock.Unlock()
 		consoleLog = cf
 		declaredLogs = make(map[int]logfile)
 		loggerChan = make(chan logMessage, BufDepth)
