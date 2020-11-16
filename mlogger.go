@@ -103,10 +103,10 @@ func SetTextLimit(tag, lm, li, ll int) error {
 // SetUpLogger set-up the loggerChan. a sync.Once is used to avoid issues with multiple modules
 // cf controls the console flag that determines if the application writes logging errors to the consoles or ignores them
 func SetUpLogger(cf bool) {
-	consoleLog = cf
 	once.Do(func() {
 		lock.Lock()
 		defer lock.Unlock()
+		consoleLog = cf
 		declaredLogs = make(map[int]logfile)
 		loggerChan = make(chan logMessage, BufDepth)
 		go logger(loggerChan)

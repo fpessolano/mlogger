@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.2]
+#### Changed
+ - Removed setup assigment causing an irremevant race warning    
+ 
 ## [0.2.1]
 #### Changed
  - SetError can also be aggregated  
