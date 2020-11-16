@@ -77,11 +77,13 @@ func DeclareLog(fn string, dt bool) (int, error) {
 
 // Close close all open files
 func Close() (e error) {
+	lock.Lock()
 	for _, file := range declaredLogs {
 		if er := file.file.Close(); er != nil && e == nil {
 			e = errors.New("error inc closing logfiles")
 		}
 	}
+	lock.Unlock()
 	return
 }
 
@@ -133,7 +135,9 @@ func Panic(lg int, dt LoggerData, quit bool) {
 	loggerChan <- logMessage{lg, "PANIC", dt}
 	if quit {
 		time.Sleep(5 * time.Second)
+		lock.RLock()
 		file := strings.Split(declaredLogs[lg].filename, "/")
+		lock.RUnlock()
 		fmt.Println("Panic error, execution terminated. See log", file[len(file)-1])
 		os.Exit(0)
 	}
@@ -222,10 +226,9 @@ func logger(data chan logMessage) {
 	for {
 		d := <-data
 		lock.RLock()
-		ind := index
-		lock.RUnlock()
-		if d.id < ind {
+		if d.id < index {
 			file := declaredLogs[d.id]
+			lock.RUnlock()
 			if input, err := ioutil.ReadFile(file.filename); err != nil {
 				if fn, err := os.Create(file.filename); err != nil {
 					if consoleLog {
@@ -285,6 +288,8 @@ func logger(data chan logMessage) {
 					log.Println("support.logger: error writing log: ", err)
 				}
 			}
+		} else {
+			lock.RUnlock()
 		}
 	}
 }
