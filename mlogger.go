@@ -221,7 +221,10 @@ func logger(data chan logMessage) {
 
 	for {
 		d := <-data
-		if d.id < index {
+		lock.RLock()
+		ind := index
+		lock.RUnlock()
+		if d.id < ind {
 			file := declaredLogs[d.id]
 			if input, err := ioutil.ReadFile(file.filename); err != nil {
 				if fn, err := os.Create(file.filename); err != nil {
