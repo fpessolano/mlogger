@@ -15,7 +15,7 @@ import (
 
 // LoggerData is the data sent to the logger from a client
 type LoggerData struct {
-	Id        string // unique identifiers necessary for aggregating messages
+	Id        string // an unique identifier is necessary for aggregating messages
 	Message   string // possible description
 	Data      []int  // effective data
 	Aggregate bool   // true if the log entry is be cumulative on its data
@@ -48,7 +48,7 @@ var once sync.Once
 var consoleLog = false
 var index = 0
 
-// DeclareLog is used to declare a new log of name 'fn'. If 'dt' is true the name will become fn_currentdate.logfile.
+// DeclareLog is used to declare a new log of name 'fn'. If 'dt' is true the name will become fn_current date.logfile.
 // Furthermore, a new logfile will be created everyday. Otherwise it will be fn.logfile and will not be created everyday.
 // It returns the log identifier (int) and the eventual error
 func DeclareLog(fn string, dt bool) (int, error) {
