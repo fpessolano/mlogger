@@ -37,7 +37,7 @@ The _mlogger.Panic_ level method accept an additional parameter:
 
     mlogger.Panic(logId, LoggerData{Id: id, Message: message, Data: data, Agregate: aggregate}, quit)  
 
-_Quit_ is a bool then when set to true, will force the execution to brutally halt.
+_Quit_ is a bool. When set, it will force the execution to brutally halt.
 
 
 
