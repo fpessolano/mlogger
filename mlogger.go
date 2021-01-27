@@ -47,6 +47,7 @@ var loggerChan chan logMessage
 var once sync.Once
 var consoleLog = false
 var index = 0
+var verbose = false
 
 // DeclareLog is used to declare a new log of name 'fn'. If 'dt' is true the name will become fn_current date.logfile.
 // Furthermore, a new logfile will be created everyday. Otherwise it will be fn.logfile and will not be created everyday.
@@ -85,6 +86,11 @@ func Close() (e error) {
 	}
 	lock.Unlock()
 	return
+}
+
+// Enables verbose (affects all logs)
+func Verbose(v bool) {
+	verbose = v
 }
 
 // SetTextLimit sets formatting limits for message (lm), id (li) and level (ll) in number of characters for logfile tag
@@ -158,7 +164,7 @@ func SetError(lg int, es string, id string, e error, data []int, aggregate bool)
 // logger is the core thread handling all the writings to log files
 func logger(data chan logMessage) {
 
-	r := func(file logfile, olddate string, d logMessage, dt ...[]int) (msg string) {
+	logEntryGenerator := func(file logfile, olddate string, d logMessage, dt ...[]int) (msg string) {
 		date := time.Now().Format("Mon Jan:_2 15:04 2006")
 		if file.messageLength != 0 {
 			if len(d.msg.Message) > file.messageLength {
@@ -214,6 +220,14 @@ func logger(data chan logMessage) {
 		return
 	}
 
+	consoleEntryGenerator := func(d logMessage) (msg string) {
+		date := time.Now().Format("Mon Jan:_2 15:04 2006")
+		msg = d.level + " -- " + d.msg.Id + ": " + d.msg.Message + ""
+		msg = date + " -- " + msg
+		msg = strings.Trim(msg, " ")
+		return
+	}
+
 	defer func() {
 		if e := recover(); e != nil {
 			if consoleLog {
@@ -229,13 +243,16 @@ func logger(data chan logMessage) {
 		if d.id < index {
 			file := declaredLogs[d.id]
 			lock.RUnlock()
+			if verbose {
+				fmt.Println(consoleEntryGenerator(d))
+			}
 			if input, err := ioutil.ReadFile(file.filename); err != nil {
 				if fn, err := os.Create(file.filename); err != nil {
 					if consoleLog {
 						fmt.Println("support.logger: error creating log: ", err)
 					}
 				} else {
-					if _, err := fn.WriteString(r(file, "", d) + "\n"); err != nil {
+					if _, err := fn.WriteString(logEntryGenerator(file, "", d) + "\n"); err != nil {
 						if consoleLog {
 							fmt.Println("support.logger: error creating log: ", err)
 						}
@@ -262,15 +279,15 @@ func logger(data chan logMessage) {
 								} else {
 									cd := logMessage{d.id, "System Warning", LoggerData{"logger", "error converting accruing data from log " + d.msg.Id,
 										[]int{}, false}}
-									newC += r(file, "", cd) + "\n"
-									newC += r(file, "", d) + "\n"
+									newC += logEntryGenerator(file, "", cd) + "\n"
+									newC += logEntryGenerator(file, "", d) + "\n"
 									skip = true
 									adFile = false
 									break mainloop
 								}
 							}
 							if !skip {
-								newC += r(file, spv[0], d, nd) + "\n"
+								newC += logEntryGenerator(file, spv[0], d, nd) + "\n"
 								adFile = false
 							}
 						} else {
@@ -282,7 +299,7 @@ func logger(data chan logMessage) {
 					}
 				}
 				if adFile {
-					newC += r(file, "", d) + "\n"
+					newC += logEntryGenerator(file, "", d) + "\n"
 				}
 				if err = ioutil.WriteFile(file.filename, []byte(newC), 0644); err != nil {
 					log.Println("support.logger: error writing log: ", err)

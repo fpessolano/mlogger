@@ -25,6 +25,10 @@ The logfile is formatted with the methods:
     mlogger.SetTextLimit(logId, lm, li, ll)
     
 Where _lm_, _li_ and _ll_ are the number of maximum characters to be used for the message text, id and level. If 0 is given, no restriction will be used.
+The logs can also be set to echo all written liones to the console by togglingthe verbose flag:
+
+    mlogger.Verbose({true|false})
+
 
 **Usage**
 A log line can be stored by using a method associated to a given level (Log, Info, Error, Warning, Recovered amd Panic). For example:  

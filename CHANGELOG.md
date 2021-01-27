@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.3.2]
+#### Added
+- Verbose flag
+
 ## [0.2.2]
 #### Changed
  - Removed setup assigment causing an irremevant race warning    

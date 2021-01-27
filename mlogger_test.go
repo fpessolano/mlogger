@@ -16,9 +16,11 @@ func Test_DLogger(t *testing.T) {
 				fmt.Println(e)
 				os.Exit(0)
 			}
+			Verbose(true)
 			Log(logId, LoggerData{"test1", "testing message", []int{2}, true})
 			Error(logId, LoggerData{"test1", "testing message", []int{2}, true})
 			Info(logId, LoggerData{"test1", "testing message", []int{2}, false})
+			Verbose(false)
 			Warning(logId, LoggerData{"test1", "testing message", []int{2}, true})
 			Recovered(logId, LoggerData{"test1", "testing message", []int{2}, true})
 			Panic(logId, LoggerData{"test1", "testing message", []int{}, true}, false)
