@@ -240,7 +240,6 @@ func logger(data chan logMessage) {
 		if !skipDate {
 			msg = date + " -- " + msg
 		}
-		//msg = date + " -- " + msg
 		msg = strings.Trim(msg, " ")
 		return
 	}
