@@ -17,6 +17,7 @@ func Test_DLogger(t *testing.T) {
 				os.Exit(0)
 			}
 			Verbose(true)
+			Unroll(true, "test.txt")
 			Log(logId, LoggerData{"test1", "testing message", []int{2}, true})
 			Error(logId, LoggerData{"test1", "testing message", []int{2}, true})
 			Info(logId, LoggerData{"test1", "testing message", []int{2}, false})

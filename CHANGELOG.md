@@ -1,9 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.4.2]
+#### Added
+- Added unrolled flag for saving also to a fully unrolled logfile  
+
 ## [0.3.2]
 #### Added
-- Verbose flag
+- Verbose flag  
 
 ## [0.2.2]
 #### Changed

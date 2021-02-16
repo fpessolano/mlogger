@@ -48,6 +48,7 @@ var once sync.Once
 var consoleLog = false
 var index = 0
 var verbose = false
+var unrolled = false
 
 // DeclareLog is used to declare a new log of name 'fn'. If 'dt' is true the name will become fn_current date.logfile.
 // Furthermore, a new logfile will be created everyday. Otherwise it will be fn.logfile and will not be created everyday.
@@ -91,6 +92,19 @@ func Close() (e error) {
 // Enables verbose (affects all logs)
 func Verbose(v bool) {
 	verbose = v
+}
+
+// Enables unroll (affects all logs)
+func Unroll(v bool, fn string) {
+	if v {
+		file, err := os.OpenFile(fn, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.SetOutput(file)
+	}
+	unrolled = v
 }
 
 // SetTextLimit sets formatting limits for message (lm), id (li) and level (ll) in number of characters for logfile tag
@@ -220,10 +234,13 @@ func logger(data chan logMessage) {
 		return
 	}
 
-	consoleEntryGenerator := func(d logMessage) (msg string) {
+	consoleEntryGenerator := func(d logMessage, skipDate bool) (msg string) {
 		date := time.Now().Format("Mon Jan:_2 15:04 2006")
 		msg = d.level + " -- " + d.msg.Id + ": " + d.msg.Message + ""
-		msg = date + " -- " + msg
+		if !skipDate {
+			msg = date + " -- " + msg
+		}
+		//msg = date + " -- " + msg
 		msg = strings.Trim(msg, " ")
 		return
 	}
@@ -244,7 +261,10 @@ func logger(data chan logMessage) {
 			file := declaredLogs[d.id]
 			lock.RUnlock()
 			if verbose {
-				fmt.Println(consoleEntryGenerator(d))
+				fmt.Println(consoleEntryGenerator(d, false))
+			}
+			if unrolled {
+				log.Println(consoleEntryGenerator(d, true))
 			}
 			if input, err := ioutil.ReadFile(file.filename); err != nil {
 				if fn, err := os.Create(file.filename); err != nil {
