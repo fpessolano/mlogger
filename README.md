@@ -3,7 +3,7 @@ About:      module for multi file level logging
 Author:     F.Pessolano  
 Licence:    MIT  
 
-NO LONGER MANTAINED
+NO LONGER SUPPORTED
 
 **Description**  
 Module for implementing centralised level loggers with multiple files and aggregation of log lines.  
